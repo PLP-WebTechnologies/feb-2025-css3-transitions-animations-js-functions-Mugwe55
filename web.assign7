@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Webpage</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            margin-bottom: 20px;
+        }
+
+        .rotate {
+            animation: rotate 1s linear; /* CSS Animation */
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #clickCount {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="box" id="myBox"></div>
+    <button id="myButton">Click Me!</button>
+    <div id="clickCount">Click Count: 0</div>
+
+    <script>
+        const box = document.getElementById('myBox');
+        const button = document.getElementById('myButton');
+        const clickCountDisplay = document.getElementById('clickCount');
+
+        // Function to get click count from localStorage
+        function getClickCount() {
+            return localStorage.getItem('clickCount') || 0;
+        }
+
+        // Function to set click count in localStorage
+        function setClickCount(count) {
+            localStorage.setItem('clickCount', count);
+        }
+
+        // Initial click count
+        let clickCount = parseInt(getClickCount());
+        clickCountDisplay.textContent = `Click Count: ${clickCount}`;
+
+        button.addEventListener('click', function() {
+            // Increment click count
+            clickCount++;
+            clickCountDisplay.textContent = `Click Count: ${clickCount}`;
+            setClickCount(clickCount); // Store in localStorage
+
+            // Trigger CSS Animation by toggling the class
+            box.classList.toggle('rotate');
+
+            // Force a reflow/repaint before removing the class
+            void box.offsetWidth;
+
+            // Remove the class after the animation completes to allow re-triggering
+            setTimeout(() => {
+                box.classList.toggle('rotate');
+            }, 1000); // 1 second, same as animation duration
+        });
+    </script>
+
+</body>
+</html>
